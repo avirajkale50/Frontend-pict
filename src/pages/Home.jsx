@@ -1,39 +1,42 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
-import AnimatedHero from "../components/AnimatedHero";
-import {
-  MapPin,
-  Shield,
-  Zap,
-  Clock,
-  ThumbsUp,
-  Users,
-  Volume2,
-  VolumeX,
-} from "lucide-react";
+import { MapPin, Shield, Zap, Clock, ThumbsUp, Users, Volume2, VolumeX } from 'lucide-react';
+import { motion } from "framer-motion";
 import mobileDesign from "../assets/mobile-design.png";
 import homeVideo from "../assets/homevideo.mp4";
 import homeMap from "../assets/home-map.png";
 
 export default function Home() {
   const [isMuted, setIsMuted] = useState(true);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleToggleMute = () => {
     setIsMuted(!isMuted);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-green-50">
+    <div className="min-h-screen bg-gray-50">
       <Header />
       <main>
         {/* Hero Section */}
-        <section className="py-20">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
+        <section className="py-20 relative overflow-hidden">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-center mb-12"
+            >
               <h1 className="text-5xl tracking-tight font-extrabold text-gray-900 sm:text-6xl md:text-7xl mb-4">
                 <span className="block">Navigate Safely with</span>
                 <span className="block text-blue-600">
-                  Safe<span className="text-green-500">Route</span>
+                  SafeJourney
                 </span>
               </h1>
               <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
@@ -42,18 +45,29 @@ export default function Home() {
                 preferences.
               </p>
               <div className="mt-10 flex justify-center space-x-4">
-                <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold rounded-md transition duration-300 ease-in-out">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-md transition duration-300 ease-in-out shadow-lg hover:bg-blue-700"
+                >
                   Start Your Safe Route
-                </button>
-                <button className="px-6 py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-lg font-semibold rounded-md transition duration-300 ease-in-out">
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-6 py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 text-lg font-semibold rounded-md transition duration-300 ease-in-out"
+                >
                   Learn More
-                </button>
+                </motion.button>
               </div>
-            </div>
-            {/* <AnimatedHero /> */}
-            {/* Video goes here */}
-            <div className="mt-12 max-w-7xl mx-auto relative">
-              <div className="rounded-2xl overflow-hidden shadow-xl">
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 100 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="mt-12 max-w-7xl mx-auto relative"
+            >
+              <div className="rounded-2xl overflow-hidden shadow-2xl">
                 <video
                   className="w-full h-full object-cover"
                   autoPlay
@@ -64,7 +78,9 @@ export default function Home() {
                   <source src={homeVideo} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                   onClick={handleToggleMute}
                   className="absolute bottom-4 right-4 p-2 bg-black/50 hover:bg-black/70 rounded-full text-white transition-colors"
                 >
@@ -73,18 +89,23 @@ export default function Home() {
                   ) : (
                     <Volume2 className="w-6 h-6" />
                   )}
-                </button>
+                </motion.button>
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
 
         {/* Features Section */}
         <section id="features" className="py-20 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-extrabold text-gray-900 text-center mb-12">
+            <motion.h2
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-4xl font-extrabold text-gray-900 text-center mb-12"
+            >
               Why Choose SafeJourney?
-            </h2>
+            </motion.h2>
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
               {[
                 {
@@ -124,11 +145,14 @@ export default function Home() {
                     "Set your own safety priorities and let our system tailor routes to your specific needs.",
                 },
               ].map((feature, index) => (
-                <div
+                <motion.div
                   key={index}
-                  className="bg-gray-50 rounded-lg p-6 shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  className="bg-white rounded-lg p-6 shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1"
                 >
-                  <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white mb-4">
+                  <div className="flex items-center justify-center h-12 w-12 rounded-md bg-blue-100 text-blue-600 mb-4">
                     <feature.icon size={24} />
                   </div>
                   <h3 className="text-lg font-medium text-gray-900 mb-2">
@@ -137,7 +161,7 @@ export default function Home() {
                   <p className="text-base text-gray-500">
                     {feature.description}
                   </p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -146,11 +170,21 @@ export default function Home() {
         {/* How It Works Section */}
         <section id="how-it-works" className="py-20 bg-gray-100">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-4xl font-extrabold text-gray-900 text-center mb-12">
+            <motion.h2
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-4xl font-extrabold text-gray-900 text-center mb-12"
+            >
               How SafeJourney Works
-            </h2>
+            </motion.h2>
             <div className="max-w-3xl mx-auto">
-              <div className="bg-white shadow-lg rounded-lg overflow-hidden">
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="bg-white shadow-2xl rounded-lg overflow-hidden"
+              >
                 <div className="p-6">
                   <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mb-6">
                     <div className="flex-1">
@@ -194,17 +228,20 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                  <button className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition duration-300 ease-in-out shadow-md hover:shadow-lg"
+                  >
                     Find Safe Route
-                  </button>
+                  </motion.button>
                 </div>
-                {/* <AnimatedHero /> */}
-              <img
-                src={homeMap}
-                alt="Safe Route Demonstration"
-                className="w-full h-90 object-cover rounded-b-lg"
-              />
-              </div>
+                <img
+                  src={homeMap}
+                  alt="Safe Route Demonstration"
+                  className="w-full h-90 object-cover rounded-b-lg"
+                />
+              </motion.div>
             </div>
           </div>
         </section>
@@ -212,55 +249,66 @@ export default function Home() {
         {/* Features Explained Section */}
         <section className="py-24 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-2 p-8 rounded-lg">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-center mb-2 p-8 rounded-lg"
+            >
               <p className="text-sm font-semibold text-blue-600 tracking-wide uppercase">
                 Features Explained
               </p>
               <h2 className="mt-2 text-4xl font-extrabold text-gray-900 lg:text-5xl">
                 Interactive Chart Displays
                 <br />
-                Key Metrics and Trends.
+                Key Metrics and Trends
               </h2>
               <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-500">
                 Your Trusted Partner in Data Protection with Cutting-Edge
                 Solutions for Comprehensive Data Security.
               </p>
-            </div>
+            </motion.div>
 
             <div className="relative">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
                 <div className="space-y-12">
-                  <div className="bg-cyan-200 p-6 rounded-lg">
-                    <h3 className="text-lg font-bold text-gray-900">
-                      Security Status Indicator
-                    </h3>
-                    <p className="mt-2 text-gray-500">
-                      Displays the current security status of your organization
-                      with a clear color-coded indicator.
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 p-6 rounded-lg">
-                    <h3 className="text-lg font-bold text-gray-900">
-                      Threat Landscape Overview
-                    </h3>
-                    <p className="mt-2 text-gray-500">
-                      Breaks down the threats by type (e.g., phishing, malware,
-                      ransomware) to give a detailed overview of the threat
-                      landscape.
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 p-6 rounded-lg">
-                    <h3 className="text-lg font-bold text-gray-900">
-                      Incident Management
-                    </h3>
-                    <p className="mt-2 text-gray-500">
-                      Lists the number of active security incidents currently
-                      being addressed.
-                    </p>
-                  </div>
+                  {[
+                    {
+                      title: "Security Status Indicator",
+                      description: "Displays the current security status of your organization with a clear color-coded indicator.",
+                    },
+                    {
+                      title: "Threat Landscape Overview",
+                      description: "Breaks down the threats by type (e.g., phishing, malware, ransomware) to give a detailed overview of the threat landscape.",
+                    },
+                    {
+                      title: "Incident Management",
+                      description: "Lists the number of active security incidents currently being addressed.",
+                    },
+                  ].map((item, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: -50 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.8, delay: index * 0.1 }}
+                      className="bg-blue-50 p-6 rounded-lg shadow-md"
+                    >
+                      <h3 className="text-lg font-bold text-gray-900">
+                        {item.title}
+                      </h3>
+                      <p className="mt-2 text-gray-600">
+                        {item.description}
+                      </p>
+                    </motion.div>
+                  ))}
                 </div>
 
-                <div className="relative mx-auto w-full max-w-[320px]">
+                <motion.div
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                  className="relative mx-auto w-full max-w-[320px]"
+                >
                   <div className="relative aspect-[320/680] mx-auto">
                     <img
                       src={mobileDesign}
@@ -268,37 +316,38 @@ export default function Home() {
                       className="absolute inset-0 w-full h-full object-contain"
                     />
                   </div>
-                </div>
+                </motion.div>
 
                 <div className="space-y-12">
-                  <div className="bg-gray-50 p-6 rounded-lg">
-                    <h3 className="text-lg font-bold text-gray-900">
-                      User Activity Monitoring
-                    </h3>
-                    <p className="mt-2 text-gray-500">
-                      Highlights the most frequently accessed sensitive files or
-                      databases and the users involved, ensuring transparency
-                      and control.
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 p-6 rounded-lg">
-                    <h3 className="text-lg font-bold text-gray-900">
-                      Data Access Monitoring
-                    </h3>
-                    <p className="mt-2 text-gray-500">
-                      Highlights the most frequently accessed sensitive files or
-                      databases and the users involved.
-                    </p>
-                  </div>
-                  <div className="bg-gray-50 p-6 rounded-lg">
-                    <h3 className="text-lg font-bold text-gray-900">
-                      Compliance Monitoring
-                    </h3>
-                    <p className="mt-2 text-gray-500">
-                      Our system continuously monitors your network and data
-                      environments for any suspicious activities.
-                    </p>
-                  </div>
+                  {[
+                    {
+                      title: "User Activity Monitoring",
+                      description: "Highlights the most frequently accessed sensitive files or databases and the users involved, ensuring transparency and control.",
+                    },
+                    {
+                      title: "Data Access Monitoring",
+                      description: "Highlights the most frequently accessed sensitive files or databases and the users involved.",
+                    },
+                    {
+                      title: "Compliance Monitoring",
+                      description: "Our system continuously monitors your network and data environments for any suspicious activities.",
+                    },
+                  ].map((item, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, x: 50 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.8, delay: index * 0.1 }}
+                      className="bg-gray-50 p-6 rounded-lg shadow-md"
+                    >
+                      <h3 className="text-lg font-bold text-gray-900">
+                        {item.title}
+                      </h3>
+                      <p className="mt-2 text-gray-600">
+                        {item.description}
+                      </p>
+                    </motion.div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -306,14 +355,14 @@ export default function Home() {
         </section>
 
         {/* Testimonial Section */}
-        {/* Testimonial Section */}
-        <section className="py-24 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 relative">
-          {/* Decorative elements */}
-          <div className="absolute inset-0 bg-grid-white/[0.1] bg-[size:20px]" />
-          <div className="absolute inset-0 bg-gradient-to-t from-blue-800/50" />
-
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-            <div className="text-center mb-16">
+        <section className="py-24 bg-blue-600">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-center mb-16"
+            >
               <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
                 Trusted by Thousands
               </h2>
@@ -321,7 +370,7 @@ export default function Home() {
                 Join our community of satisfied users who navigate with
                 confidence using SafeRoute
               </p>
-            </div>
+            </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
@@ -350,111 +399,46 @@ export default function Home() {
                   rating: 5,
                 },
               ].map((testimonial, index) => (
-                <div key={index} className="relative group">
-                  <div className="absolute -inset-2 bg-gradient-to-r from-blue-600 to-green-500 rounded-xl blur opacity-25 group-hover:opacity-100 transition duration-1000 group-hover:duration-200" />
-                  <div className="relative bg-white rounded-xl p-8 ring-1 ring-gray-900/5 shadow-xl">
-                    <div className="flex items-center gap-4 mb-6">
-                      <div className="relative">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-green-500 flex items-center justify-center text-white text-xl font-bold ring-4 ring-white">
-                          {testimonial.name[0]}
-                        </div>
-                        <div className="absolute -bottom-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center ring-2 ring-white">
-                          <svg
-                            className="w-4 h-4 text-white"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                        </div>
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-gray-900">
-                          {testimonial.name}
-                        </h3>
-                        <p className="text-sm text-gray-500">
-                          {testimonial.role} • {testimonial.location}
-                        </p>
-                      </div>
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  className="bg-white rounded-xl p-8 shadow-xl"
+                >
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xl font-bold">
+                      {testimonial.name[0]}
                     </div>
-
-                    <div className="mb-4">
-                      <div className="flex gap-1">
-                        {[...Array(testimonial.rating)].map((_, i) => (
-                          <svg
-                            key={i}
-                            className="w-5 h-5 text-yellow-400"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                        ))}
-                      </div>
-                    </div>
-
-                    <blockquote className="text-gray-700 leading-relaxed">
-                      "{testimonial.quote}"
-                    </blockquote>
-
-                    <div className="mt-6 flex items-center justify-between">
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <svg
-                          className="w-5 h-5 text-blue-500"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                        <span>Verified User</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button className="text-gray-400 hover:text-gray-500">
-                          <svg
-                            className="w-5 h-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                            />
-                          </svg>
-                        </button>
-                        <button className="text-gray-400 hover:text-gray-500">
-                          <svg
-                            className="w-5 h-5"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-                            />
-                          </svg>
-                        </button>
-                      </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900">
+                        {testimonial.name}
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        {testimonial.role} • {testimonial.location}
+                      </p>
                     </div>
                   </div>
-                </div>
+
+                  <div className="mb-4">
+                    <div className="flex gap-1">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <svg
+                          key={i}
+                          className="w-5 h-5 text-yellow-400"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                    </div>
+                  </div>
+
+                  <blockquote className="text-gray-700 leading-relaxed">
+                    "{testimonial.quote}"
+                  </blockquote>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -466,7 +450,7 @@ export default function Home() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 py-16">
               <div className="space-y-4">
                 <span className="text-2xl font-bold text-white">
-                  Safe<span className="text-green-500">Journey</span>
+                  Safe<span className="text-blue-500">Journey</span>
                 </span>
                 <p className="text-sm text-gray-400 mt-2">
                   Making your journey safer with AI-powered route
@@ -593,3 +577,4 @@ export default function Home() {
     </div>
   );
 }
+

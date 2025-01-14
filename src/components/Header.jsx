@@ -1,7 +1,6 @@
-import { useState } from "react";
-// import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, MapPin, Shield, Zap } from "lucide-react";
+import { Menu, X, MapPin, Shield, Zap } from 'lucide-react';
 
 const navItems = [
   { name: "Home", href: "/", icon: MapPin },
@@ -11,10 +10,19 @@ const navItems = [
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <motion.header
-      className="bg-white shadow-sm sticky top-0 z-50"
+      className={`bg-white shadow-sm sticky top-0 z-50 transition-all duration-300 ${
+        scrollY > 0 ? "py-2" : "py-4"
+      }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
@@ -27,7 +35,7 @@ export default function Header() {
             whileTap={{ scale: 0.95 }}
           >
             <span className="text-2xl font-bold text-blue-600">
-              Safe<span className="text-green-500">Journey</span>
+              Safe<span className="text-gray-900">Journey</span>
             </span>
           </motion.div>
           <div className="hidden md:block">
@@ -38,18 +46,25 @@ export default function Header() {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <span className="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 flex items-center">
+                  <a
+                    href={item.href}
+                    className="text-gray-600 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-300 flex items-center"
+                  >
                     <item.icon className="mr-2" size={16} />
                     {item.name}
-                  </span>
+                  </a>
                 </motion.div>
               ))}
             </div>
           </div>
           <div className="hidden md:block">
-            <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-300 ease-in-out">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md transition duration-300 ease-in-out shadow-md hover:bg-blue-700"
+            >
               Get Started
-            </button>
+            </motion.button>
           </div>
           <div className="md:hidden">
             <motion.button
@@ -79,22 +94,24 @@ export default function Header() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <span
+                  <a
                     href={item.href}
                     className="text-gray-600 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium flex items-center"
                     onClick={() => setIsOpen(false)}
                   >
                     <item.icon className="mr-2" size={16} />
                     {item.name}
-                  </span>
+                  </a>
                 </motion.div>
               ))}
-              <button
-                className="w-full mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-300 ease-in-out"
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full mt-4 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md transition duration-300 ease-in-out shadow-md hover:bg-blue-700"
                 onClick={() => setIsOpen(false)}
               >
                 Get Started
-              </button>
+              </motion.button>
             </div>
           </motion.div>
         )}
@@ -102,3 +119,4 @@ export default function Header() {
     </motion.header>
   );
 }
+
